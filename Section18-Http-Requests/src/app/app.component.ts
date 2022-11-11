@@ -48,7 +48,7 @@ export class AppComponent implements OnInit {
     }))
     .subscribe(
       posts => {
-        console.log(posts);
+        this.loadedPosts = posts;
       }
     );
   }
