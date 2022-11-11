@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
 
   onCreatePost(postData: Post) {
     // Send Http request
-    this.http.post(
+    this.http.post<{name: string}>(
       'https://ng-recipe-app-ab758-default-rtdb.firebaseio.com/posts.json', 
       postData).subscribe(responseData => {
         console.log(responseData);
@@ -36,7 +36,7 @@ export class AppComponent implements OnInit {
   }
 
   private fetchPosts() {
-    this.http.get('https://ng-recipe-app-ab758-default-rtdb.firebaseio.com/posts.json')
+    this.http.get<{[key: string]: Post}>('https://ng-recipe-app-ab758-default-rtdb.firebaseio.com/posts.json')
     .pipe(map((responseData: {[key: string]: Post}) => {
       const postsArray: Post[] = [];
       for(const key in responseData){
