@@ -27,11 +27,15 @@ export class PostService {
   }
 
   fetchPost() {
+    let searchParams = new HttpParams();
+    searchParams = searchParams.append('print', 'test');
+    searchParams = searchParams.append('print1', 'test1');
+
     return this.http.get<{[key: string]: Post}>(
       'https://ng-recipe-app-ab758-default-rtdb.firebaseio.com/posts.json',
       {
         headers: new HttpHeaders({"custom-header": 'hello'}),
-        params: new HttpParams().set('print', 'pretty')
+        params: searchParams
       })
     .pipe(map((responseData: {[key: string]: Post}) => {
       const postsArray: Post[] = [];
