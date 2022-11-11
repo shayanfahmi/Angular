@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Subject, throwError } from "rxjs";
 import { catchError, map } from "rxjs/operators";
@@ -18,7 +18,8 @@ export class PostService {
     
     this.http.post<{name: string}>(
       'https://ng-recipe-app-ab758-default-rtdb.firebaseio.com/posts.json', 
-      postData).subscribe(responseData => {
+      postData)
+        .subscribe(responseData => {
         console.log(responseData);
       }, error => {
         this.error.next(error.message);
@@ -26,7 +27,12 @@ export class PostService {
   }
 
   fetchPost() {
-    return this.http.get<{[key: string]: Post}>('https://ng-recipe-app-ab758-default-rtdb.firebaseio.com/posts.json')
+    return this.http.get<{[key: string]: Post}>(
+      'https://ng-recipe-app-ab758-default-rtdb.firebaseio.com/posts.json',
+      {
+        headers: new HttpHeaders({"custom-header": 'hello'}),
+        params: new HttpParams().set('print', 'pretty')
+      })
     .pipe(map((responseData: {[key: string]: Post}) => {
       const postsArray: Post[] = [];
       for(const key in responseData){
