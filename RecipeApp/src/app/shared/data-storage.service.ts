@@ -26,16 +26,9 @@ export class DataStorageService {
   }
 
   fetchRecipes() {
-    return this.authService.user.pipe(
-      take(1),  //subscribe to authService.User and fetch only one data then unsubscribe to it
-      exhaustMap(user => {  //this waits for the above observable to finish first then changes it to the observable inside this.
-        return this.http.get<Recipe[]>(
-          'https://ng-recipe-app-ab758-default-rtdb.firebaseio.com/recipes.json',
-          {
-            params: new HttpParams().set('auth', user.token)
-          }
-        );
-      }),
+    return this.http.get<Recipe[]>(
+      'https://ng-recipe-app-ab758-default-rtdb.firebaseio.com/recipes.json',
+    ).pipe(
       map(recipes => {
         return recipes.map(recipe => {
           return { ...recipe, ingredients: recipe.ingredients ? recipe.ingredients : [] };
@@ -44,6 +37,6 @@ export class DataStorageService {
       tap(recipes => {
         this.recipeService.setRecipes(recipes);
       })
-    )
+    );
   }
 }
